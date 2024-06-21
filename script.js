@@ -9,7 +9,8 @@ const operator = {
 
 const numberButtons = document.querySelectorAll('.numberButtons button');
 const operatorButtons = document.querySelectorAll('.operatorButtons button');
-const equalButton = document.querySelector('#equal')
+const equalButton = document.querySelector('#equal');
+const deleteButton = document.querySelector('#delete')
 const display = document.querySelector('#display');
 
 let currentNumber = "";
@@ -53,6 +54,8 @@ equalButton.addEventListener('click', ()=>{
 
 })
 
+deleteButton.addEventListener('click',() => resetAll())
+
 // function section
 
 function operate(a,b,operator){
@@ -62,11 +65,9 @@ function operate(a,b,operator){
 
 function handleOperator(operatorCounter,event){
 if (operatorCounter > 1){
-  console.log(previousId)
   currentId = event.target.id;
   result = operator[previousId](a,b);
   previousId = currentId;
-  console.log(result)
   a = result;
   display.textContent = a;
   currentNumber = '';
@@ -74,6 +75,17 @@ if (operatorCounter > 1){
 } else{
   previousId = event.target.id;
   currentNumber = '';
-  console.log(previousId)
 }
+}
+
+function resetAll(){
+  currentNumber = "";
+  operatorCounter = 0;
+  result = 0;
+  currentId = "";
+  previousId = "";
+  a = 0;
+  b = 0;
+  isFirstNumberEntered = false;
+  display.textContent = ''
 }
