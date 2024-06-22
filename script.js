@@ -10,8 +10,10 @@ const operator = {
 const numberButtons = document.querySelectorAll('.numberButtons button');
 const operatorButtons = document.querySelectorAll('.operatorButtons button');
 const equalButton = document.querySelector('#equal');
-const deleteButton = document.querySelector('#delete')
+const clearButton = document.querySelector('#clear');
+const decimalButton = document.querySelector('#decimal');
 const display = document.querySelector('#display');
+const deleteButton = document.querySelector('#delete');
 
 let currentNumber = "";
 let operatorCounter = 0;
@@ -42,19 +44,44 @@ operatorButtons.forEach(button => {
   button.addEventListener('click', (event) =>{
     isFirstNumberEntered = true;
     operatorCounter++
+    console.log(operatorCounter)
     handleOperator(operatorCounter,event);
   })
 })
 
 equalButton.addEventListener('click', ()=>{
-  result = operator[previousId](a,b);
+  if (typeof operator[previousId] == 'function'){
+  result = Math.round(operator[previousId](a,b)*100000)/100000;
   a = result;
   display.textContent = result;
+  isFirstNumberEntered = false;
+  previousId = "";
+  currentNumber = "";
   operatorCounter = 0;
+  } 
 
 })
 
-deleteButton.addEventListener('click',() => resetAll())
+decimalButton.addEventListener('click', (event) => {
+  if(!currentNumber.includes('.')){
+    currentNumber += event.target.textContent;
+    display.textContent = currentNumber;
+
+    if (isFirstNumberEntered){
+      b = Number(currentNumber);
+    } else {
+      a = Number(currentNumber)
+    }
+  }
+
+})
+
+clearButton.addEventListener('click',() => resetAll())
+
+deleteButton.addEventListener('click',() => {
+  currentNumber = currentNumber.slice(0,currentNumber.length-1)
+  display.textContent = currentNumber;
+})
 
 // function section
 
@@ -64,6 +91,7 @@ function operate(a,b,operator){
 }
 
 function handleOperator(operatorCounter,event){
+
 if (operatorCounter > 1){
   currentId = event.target.id;
   result = operator[previousId](a,b);
@@ -87,5 +115,5 @@ function resetAll(){
   a = 0;
   b = 0;
   isFirstNumberEntered = false;
-  display.textContent = ''
+  display.textContent = '0';
 }
