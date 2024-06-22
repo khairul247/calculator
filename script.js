@@ -7,7 +7,7 @@ const operator = {
   divide: (a,b) => b === 0 ? 'How Dare You!' : a/b
 }
 
-const numberButtons = document.querySelectorAll('.numberButtons button');
+const numberButtons = document.querySelectorAll('.numberButtons');
 const operatorButtons = document.querySelectorAll('.operatorButtons button');
 const equalButton = document.querySelector('#equal');
 const clearButton = document.querySelector('#clear');
@@ -44,20 +44,28 @@ operatorButtons.forEach(button => {
   button.addEventListener('click', (event) =>{
     isFirstNumberEntered = true;
     operatorCounter++
-    console.log(operatorCounter)
     handleOperator(operatorCounter,event);
   })
 })
 
 equalButton.addEventListener('click', ()=>{
   if (typeof operator[previousId] == 'function'){
-  result = Math.round(operator[previousId](a,b)*100000)/100000;
-  a = result;
-  display.textContent = result;
-  isFirstNumberEntered = false;
-  previousId = "";
-  currentNumber = "";
-  operatorCounter = 0;
+    let value = operator[previousId](a,b);
+    if(isNaN(value)){
+      display.textContent = value;
+      isFirstNumberEntered = false;
+      previousId = "";
+      currentNumber = "";
+      operatorCounter = 0;
+    } else{
+    result = Math.round(value*100000)/100000;
+    a = result;
+    display.textContent = result;
+    isFirstNumberEntered = false;
+    previousId = "";
+    currentNumber = "";
+    operatorCounter = 0;
+    }
   } 
 
 })
